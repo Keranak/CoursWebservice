@@ -1,53 +1,60 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
-<definitions name="Nom_du_service" 
-            targetNamespace="http://example.com/service" 
-            xmlns="http://schemas.xmlsoap.org/wsdl/" 
-            xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" 
-            xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-  <!-- Les définitions des types de données et des messages seront ajoutées dans les étapes suivantes. -->
-  
-  <message name="Nom_du_message">
-    <part name="Paramètre_1" type="xsd:string" />
-    <part name="Paramètre_2" type="xsd:int" />
+<definitions xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://example.com/ordertracking" name="OrderTrackingService" targetNamespace="http://example.com/ordertracking">
+ 
+  <types>
+    <schema xmlns="http://www.w3.org/2001/XMLSchema" targetNamespace="http://example.com/ordertracking">
+      <import namespace="http://schemas.xmlsoap.org/soap/encoding/"/>
+      <element name="OrderID">
+        <complexType>
+          <sequence>
+            <element name="ID" type="xsd:string"/>
+          </sequence>
+        </complexType>
+      </element>
+      <element name="OrderInfo">
+        <complexType>
+          <sequence>
+            <element name="OrderDate" type="xsd:date"/>
+            <element name="Status" type="xsd:string"/>
+            <element name="ShippingInfo" type="xsd:string"/>
+          </sequence>
+        </complexType>
+      </element>
+    </schema>
+  </types>
+ 
+  <message name="GetOrderInfoRequest">
+    <part name="OrderID" element="tns:OrderID"/>
   </message>
-
-  <portType name="Nom_du_portType">
-    <operation name="Nom_de_l'opération">
-      <input message="tns:Nom_du_message" />
-      <output message="tns:Nom_du_message" />
+ 
+  <message name="GetOrderInfoResponse">
+    <part name="OrderInfo" element="tns:OrderInfo"/>
+  </message>
+ 
+  <portType name="OrderTrackingPortType">
+    <operation name="GetOrderInfo">
+      <input message="tns:GetOrderInfoRequest"/>
+      <output message="tns:GetOrderInfoResponse"/>
     </operation>
   </portType>
-
-  <binding name="Nom_du_binding" type="tns:Nom_du_portType">
-    <soap:binding style="rpc" transport="http://schemas.xmlsoap.org/soap/http" />
-    <operation name="Nom_de_l'opération">
-      <soap:operation soapAction="http://example.com/service/Nom_de_l'opération" />
+ 
+  <binding name="OrderTrackingBinding" type="tns:OrderTrackingPortType">
+    <soap:binding style="rpc" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <operation name="GetOrderInfo">
+      <soap:operation soapAction="http://example.com/ordertracking/GetOrderInfo"/>
       <input>
-        <soap:body use="encoded" namespace="http://example.com/service" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+        <soap:body use="encoded" namespace="http://example.com/ordertracking" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
       </input>
       <output>
-        <soap:body use="encoded" namespace="http://example.com/service" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+        <soap:body use="encoded" namespace="http://example.com/ordertracking" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
       </output>
     </operation>
   </binding>
-
-  <service name="Nom_du_service">
-    <port name="Nom_du_port" binding="tns:Nom_du_binding">
-      <soap:address location="http://example.com/service/Nom_du_port" />
+ 
+  <service name="OrderTrackingService">
+    <port name="OrderTrackingPort" binding="tns:OrderTrackingBinding">
+      <soap:address location="http://example.com/ordertracking"/>
     </port>
   </service>
-  
-  <types>
-    <xsd:schema targetNamespace="http://example.com/service">
-      <xsd:complexType name="Nom_du_type">
-        <xsd:sequence>
-          <xsd:element name="Paramètre_1" type="xsd:string" />
-          <xsd:element name="Paramètre_2" type="xsd:int" />
-        </xsd:sequence>
-      </xsd:complexType>
-    </xsd:schema>
-  </types>
-
-
+ 
 </definitions>
